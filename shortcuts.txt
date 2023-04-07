@@ -1,0 +1,11 @@
+python3 -m venv .venv
+    create ambiente virtual
+. .venv/Scripts/activate
+
+pip install -r requirements.txt
+
+flask run
+docker build -t rest-api-python . 
+    create image
+docker run -p 5005:5000 rest-api-python
+    create container
