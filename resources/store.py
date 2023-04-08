@@ -36,5 +36,5 @@ class StoreList(MethodView):
     
 
     def get(self):
-        return "Hello world"
+        # return "Hello world"
         return {"stores": list(stores.values())}

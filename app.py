@@ -5,6 +5,7 @@ from resources.item import blp as ItemBlueprint
 from resources.store import blp as StoreBlueprint
 
 app = Flask(__name__)
+# app.debug = True
 
 app.config["PROPAGATE_EXCEPTION"] = True
 app.config["API_TITLE"] = "Stores REST API"
