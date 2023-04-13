@@ -21,6 +21,5 @@ class ItemSchema(PlainItemSchema):
     store = fields.Nested(PlainStoreSchema(), dump_only=True)
 
 
-
 class StoreSchema(PlainStoreSchema):
     items = fields.List(fields.Nested(PlainStoreSchema(), dump_only=True))
