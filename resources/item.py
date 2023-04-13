@@ -1,7 +1,9 @@
-import uuid
 from flask.views import MethodView 
 from flask_smorest import abort, Blueprint
+from sqlalchemy.exc import SQLAlchemyError
 
+from models import ItemModel
+from db import db
 from schemas import ItemSchema, ItemUpdateSchema
 
 
@@ -38,20 +40,20 @@ class Item(MethodView):
     
 @blp.route('/item')
 class ItemList(MethodView):
-    @blp.arguments(ItemSchema)
-    @blp.response(201, ItemSchema)
-    def post(self, item_data):
-        for item in items.values():
-            if item_data["name"] == item["name"] and item_data["store_id"] == item["store_id"]:
-                abort(404, message="Store not found.")
-        
-        item_id = uuid.uuid4().hex
-        item = {**item_data, "id": item_id}
-        items[item_id] = item
-
-        return item, 201
-    
-
     @blp.response(200, ItemSchema(many=True))
     def get(self):
         return items.values()
+    
+
+    @blp.arguments(ItemSchema)
+    @blp.response(201, ItemSchema)
+    def post(self, item_data):
+        item = ItemModel(**item_data)
+
+        try:
+            db.session.add(item)
+            db.session.commit()
+        except SQLAlchemyError:
+            abort(500, message="An error occurred whilte inserting the item.")
+
+        return item, 201
