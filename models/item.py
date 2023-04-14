@@ -9,3 +9,30 @@ class ItemModel(db.Model):
     price = db.Column(db.Float(precision=2), unique=False, nullable=False)
     store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), unique=False, nullable=False)
     store = db.relationship("StoreModel", back_populates="items")
+
+
+    def json(self):
+        return {
+            "site_id": self.site_id,
+            "url": self.url,
+            "name": self.name,
+            "hoteis": [hotel.json() for hotel in self.hoteis]
+        }
+    
+    @classmethod
+    def find_item(cls, id):
+        item = cls.query.get_or_404(id)
+        return item
+    
+    def save_item(self):
+        db.session.add(self)
+        db.session.commit()
+
+    def update_site(self, price, name):
+        self.price = price
+        self.name = name
+
+    def delete_db(self):
+        # [hotel.delete_hotel() for hotel in self.hoteis]
+        db.session.delete(self)
+        db.session.commit()
