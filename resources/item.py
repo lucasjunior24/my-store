@@ -1,7 +1,6 @@
 from flask.views import MethodView 
 from flask_smorest import abort, Blueprint
 from sqlalchemy.exc import SQLAlchemyError
-from typing import cast
 
 from models import ItemModel
 from db import db
@@ -19,27 +18,28 @@ class Item(MethodView):
 
 
     def delete(self, item_id):
-        item = ItemModel.query.get_or_404(item_id)
-        raise NotImplementedError("deleting an item is not implemented")
+        item = ItemModel.find_item(item_id)
+        item.delete_item()
+        return {"message": "Item deleted."}
 
 
     @blp.arguments(ItemUpdateSchema)
     @blp.response(200, ItemSchema)
     def put(self, item_data, item_id):
-        item = ItemModel.query.get(item_id)
-        item = cast(ItemModel, item)
+        item = ItemModel.get(item_id)
         if item:
-            item.update_site(**item_data)
+            item.update_item(**item_data)
         else:
             item = ItemModel(id=item_id, **item_data)
         item.save_item()
         return item
     
+    
 @blp.route('/item')
 class ItemList(MethodView):
     @blp.response(200, ItemSchema(many=True))
     def get(self):
-        return items.values()
+        return ItemModel.query.all()
     
 
     @blp.arguments(ItemSchema)

@@ -1,3 +1,4 @@
+from typing import cast
 from db import db
 
 
@@ -20,19 +21,29 @@ class ItemModel(db.Model):
         }
     
     @classmethod
-    def find_item(cls, id):
+    def find_item(cls, id: int):
         item = cls.query.get_or_404(id)
+        item = cast(ItemModel, item)
         return item
+    
+    @classmethod
+    def get(cls, id: int):
+        item = cls.query.get(id)
+        item = cast(ItemModel, item)
+        return item
+    
     
     def save_item(self):
         db.session.add(self)
         db.session.commit()
 
-    def update_site(self, price, name):
+
+    def update_item(self, price: str, name: str):
         self.price = price
         self.name = name
 
-    def delete_db(self):
+
+    def delete_item(self):
         # [hotel.delete_hotel() for hotel in self.hoteis]
         db.session.delete(self)
         db.session.commit()
