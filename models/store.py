@@ -8,14 +8,15 @@ class StoreModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), unique=True, nullable=False)
     items = db.relationship("ItemModel", back_populates="store", lazy="dynamic", cascade="all, delete")
+    tags = db.relationship("TagModel", back_populates="store", lazy="dynamic", cascade="all, delete")
 
     def json(self):
         return {
-            "site_id": self.site_id,
-            "url": self.url,
-            "name": self.name,
-            "hoteis": [hotel.json() for hotel in self.hoteis]
-        }
+                    "site_id": self.site_id,
+                    "url": self.url,
+                    "name": self.name,
+                    "hoteis": [hotel.json() for hotel in self.hoteis]
+                }
     
 
     @classmethod

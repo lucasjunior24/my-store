@@ -13,4 +13,4 @@ docker run -p 5005:5000 rest-api-python
 create con with volume
 docker run -dp 5005:5000 -w /app -v "~/Documents/estudos/python/my-store:/app" rest-api-python
 ou 
-docker run -dp 5000:5000 -w /app -v "/c/Users/Souza/Documents/estudos/python/my-store:/app" flask-smorest-api
+docker run -dp 5000:5000 -w /app -v "/c/Users/Souza/Documents/estudos/python/my-store:/app" rest-api-python
