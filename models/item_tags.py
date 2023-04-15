@@ -2,16 +2,12 @@ from typing import cast
 from db import db
 
 
-class ItemModel(db.Model):
-    __tablename__ = 'items'
+class ItemTagsModel(db.Model):
+    __tablename__ = 'items_tags'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
-    price = db.Column(db.Float(precision=2), unique=False, nullable=False)
-    store_id = db.Column(db.Integer, db.ForeignKey('stores.id'), unique=False, nullable=False)
-
-    store = db.relationship("StoreModel", back_populates="items")
-    tags = db.relationship("TagModel", back_populates="items", secondary="items_tags")
+    items_id = db.Column(db.Integer, db.ForeignKey('items.id'))
+    tags_id = db.Column(db.Integer, db.ForeignKey('tags.id'))
 
 
     def json(self):
@@ -25,13 +21,13 @@ class ItemModel(db.Model):
     @classmethod
     def find_item(cls, id: int):
         item = cls.query.get_or_404(id)
-        item = cast(ItemModel, item)
+        item = cast(ItemTagsModel, item)
         return item
     
     @classmethod
     def get(cls, id: int):
         item = cls.query.get(id)
-        item = cast(ItemModel, item)
+        item = cast(ItemTagsModel, item)
         return item
     
     
