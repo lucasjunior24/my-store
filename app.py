@@ -1,6 +1,8 @@
 from flask import Flask
 from flask_smorest import Api
 import os
+from flask_jwt_extended import JWTManager
+
 from db import db
 
 from resources.item import blp as ItemBlueprint
@@ -25,6 +27,9 @@ def create_app(db_url=None):
     db.init_app(app)
 
     api = Api(app)
+
+    app.config["JWT_SECRET_KEY"] = "209707996766623913962269031639784806533"
+    jwt = JWTManager(app)
     
     @app.before_first_request
     def create_tables():

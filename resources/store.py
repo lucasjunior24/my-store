@@ -1,4 +1,3 @@
-import uuid
 from flask.views import MethodView 
 from flask_smorest import abort, Blueprint
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
