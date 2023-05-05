@@ -9,7 +9,7 @@ from schemas import ItemSchema, ItemUpdateSchema
 
 blp = Blueprint("Itens", __name__, description="Operations on Item")
 
-@blp.route('/item/<string:item_id>')
+@blp.route('/item/<int:item_id>')
 class Item(MethodView):
     @blp.response(200, ItemSchema)
     def get(self, item_id):

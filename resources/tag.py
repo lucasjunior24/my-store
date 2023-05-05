@@ -59,7 +59,7 @@ class LinkTagsToItems(MethodView):
 
 
     
-@blp.route('/tag/<string:tag_id>')
+@blp.route('/tag/<int:tag_id>')
 class Tag(MethodView):
     @blp.response(200, TagSchema)
     def get(self, tag_id):

@@ -8,6 +8,7 @@ from db import db
 from resources.item import blp as ItemBlueprint
 from resources.store import blp as StoreBlueprint
 from resources.tag import blp as TagBlueprint
+from resources.user import blp as UserBlueprint
 
 def create_app(db_url=None):
     app = Flask(__name__)
@@ -29,7 +30,7 @@ def create_app(db_url=None):
     api = Api(app)
 
     app.config["JWT_SECRET_KEY"] = "209707996766623913962269031639784806533"
-    jwt = JWTManager(app)
+    # jwt = JWTManager(app)
     
     @app.before_first_request
     def create_tables():
@@ -39,5 +40,7 @@ def create_app(db_url=None):
     api.register_blueprint(ItemBlueprint)
     api.register_blueprint(StoreBlueprint)
     api.register_blueprint(TagBlueprint)
+    api.register_blueprint(UserBlueprint)
+
 
     return app

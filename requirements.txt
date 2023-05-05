@@ -1,6 +1,8 @@
-flask
-flask-smorest
-python-dotenv
-sqlalchemy
+Flask==2.2.3
+flask-smorest==0.41.0
+python-dotenv==1.0.0
+SQLAlchemy==2.0.9
 flask-sqlalchemy
-flask-jwt-extended
+Flask-JWT-Extended==4.4.4
+passlib==1.7.4
+
