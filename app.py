@@ -30,7 +30,7 @@ def create_app(db_url=None):
     api = Api(app)
 
     app.config["JWT_SECRET_KEY"] = "209707996766623913962269031639784806533"
-    # jwt = JWTManager(app)
+    jwt = JWTManager(app)
     
     @app.before_first_request
     def create_tables():
