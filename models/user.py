@@ -46,7 +46,7 @@ class UserModel(db.Model):
         db.session.commit()
 
     @classmethod
-    def validate_user(self, user_data):
+    def validate_user(self, user_data) -> str:
         user = self.query.filter(
             self.username == user_data["username"]
         ).first()

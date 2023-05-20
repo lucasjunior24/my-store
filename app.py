@@ -32,6 +32,13 @@ def create_app(db_url=None):
     app.config["JWT_SECRET_KEY"] = "209707996766623913962269031639784806533"
     jwt = JWTManager(app)
 
+    @jwt.additional_claims_loader
+    def add_claims_to_jwt(identity):
+        if identity == 1:
+            return {"is_admin": True}
+        else: 
+            return {"is_admin": False}
+
     @jwt.expired_token_loader
     def expired_token_callback(jwt_header, jwt_payload):
         return (
@@ -47,7 +54,7 @@ def create_app(db_url=None):
     @jwt.unauthorized_loader
     def missing_token_callback(error):
         return (
-            jsonify({"description": "Request does not contain an access token.", "error": "unauthorization_required"}),
+            jsonify({"description": "Request does not contain an access token.", "error": "authorization_required"}),
             401
         )
 

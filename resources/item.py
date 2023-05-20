@@ -1,7 +1,7 @@
 from flask.views import MethodView 
 from flask_smorest import abort, Blueprint
 from sqlalchemy.exc import SQLAlchemyError
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt
 
 from models import ItemModel
 from schemas import ItemSchema, ItemUpdateSchema
@@ -18,6 +18,9 @@ class Item(MethodView):
 
     @jwt_required()
     def delete(self, item_id):
+        jwt = get_jwt()
+        if not jwt.get("is_admin"):
+            abort(401, message="Admin privilege required.")
         item = ItemModel.find_item(item_id)
         item.delete_item()
         return {"message": "Item deleted."}
