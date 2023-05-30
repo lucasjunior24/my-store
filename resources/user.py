@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_smorest import abort, Blueprint
 from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from passlib.hash import pbkdf2_sha256
-from flask_jwt_extended import create_access_token, get_jwt, jwt_required
+from flask_jwt_extended import create_access_token, get_jwt, jwt_required, create_refresh_token, get_jwt_identity
 from blocklist import BLOCKLIST
 from models import UserModel
 from schemas import UserSchema
@@ -44,8 +44,18 @@ class User(MethodView):
 class UserLogin(MethodView):
     @blp.arguments(UserSchema)
     def post(self, user_data):
-        access_token = UserModel.validate_user(user_data)
-        return {"access_token": access_token} if access_token else abort(401, message="Invalid credentials.")
+        token = UserModel.validate_user(user_data)
+        return token if token.get('access_token') else abort(401, message="Invalid credentials.")
+    
+
+@blp.route('/refresh')
+class RefreshToken(MethodView):
+    @jwt_required(refresh=True)
+    def post(self):
+        current_user = get_jwt_identity()
+        new_token = create_access_token(identity=current_user, fresh=False)
+        return {"access_token": new_token}
+
 
 @blp.route('/logout')
 class UserLogout(MethodView):

@@ -1,8 +1,8 @@
 
 from db import db
-from typing import cast
+from typing import cast, Union
 from passlib.hash import pbkdf2_sha256
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token, create_refresh_token
 
 class UserModel(db.Model):
     __tablename__ = 'users'
@@ -46,13 +46,14 @@ class UserModel(db.Model):
         db.session.commit()
 
     @classmethod
-    def validate_user(self, user_data) -> str:
+    def validate_user(self, user_data) -> dict[str, str]:
         user = self.query.filter(
             self.username == user_data["username"]
         ).first()
         user = cast(UserModel, user)
         if user and pbkdf2_sha256.verify(user_data["password"], user.password):
-            access_token = create_access_token(identity=user.id)
-            return access_token
-        return ''
+            access_token = create_access_token(identity=user.id, fresh=True)
+            refresh_token = create_refresh_token(identity=user.id)
+            return  {"access_token": access_token, "refresh_token": refresh_token} 
+        return {"access_token": '', "refresh_token": ''} 
         
